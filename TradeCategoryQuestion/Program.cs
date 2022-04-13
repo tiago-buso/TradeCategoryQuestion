@@ -1,10 +1,16 @@
-﻿namespace TradeCategoryQuestion.Models
+﻿using TradeCategoryQuestion.Services;
+
+namespace TradeCategoryQuestion.Models
 {
-    internal class Program
-    {
+    public class Program
+    {       
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            InputService inputService = new InputService();
+
+            string path = $"{Directory.GetCurrentDirectory()}\\Input\\Input.txt";          
+
+            List<Trade> trades = inputService.GetTradesFromInput(path);
         }
     }
 }
