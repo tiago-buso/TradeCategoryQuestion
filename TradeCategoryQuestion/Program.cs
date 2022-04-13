@@ -10,7 +10,7 @@ namespace TradeCategoryQuestion.Models
 
             string path = $"{Directory.GetCurrentDirectory()}\\Input\\Input.txt";          
 
-            List<Trade> trades = inputService.GetTradesFromInput(path);
+            List<string> categories = inputService.GetCategoriesFromFile(path);
         }
     }
 }

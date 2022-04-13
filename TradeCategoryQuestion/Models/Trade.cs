@@ -15,6 +15,7 @@ namespace TradeCategoryQuestion.Models
         private readonly int ValueColumn = 0;
         private readonly int ClientSectorColumn = 1;
         private readonly int NextPaymentDateColumn = 2;
+        private readonly string DateTimeFormat = "MM/dd/yyyy";
 
         //Itrade properties
         public double Value {get; private set;}
@@ -41,7 +42,7 @@ namespace TradeCategoryQuestion.Models
         {
             if (IsReferenceDateLineNumber(textFileLineNumber))
             {
-                ReferenceDate = DateTime.Parse(textLine);   
+                ReferenceDate = DateTime.ParseExact(textLine, DateTimeFormat, null);   
             }
             else if (IsNumberOfTradesLineNumber(textFileLineNumber))
             {
@@ -106,7 +107,7 @@ namespace TradeCategoryQuestion.Models
 
         public void SetNextPaymentDateFromText(string text)
         {
-            NextPaymentDate = DateTime.Parse(text);
+            NextPaymentDate = DateTime.ParseExact(text, DateTimeFormat, null);
         }        
     }
 }

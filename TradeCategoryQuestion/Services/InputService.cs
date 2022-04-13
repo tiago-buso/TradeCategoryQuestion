@@ -9,11 +9,18 @@ namespace TradeCategoryQuestion.Services
 {
     public class InputService 
     {
-        public List<Trade> GetTradesFromInput(string path)
+        public List<string> GetCategoriesFromFile(string path)
         {
-            List<Trade> trades = new List<Trade>(); 
-            string text = string.Empty;
-            Trade trade = new Trade();
+            Dictionary<int, string> lines = GetLinesFromInput(path);
+
+            Trade trade = GetTradeFromInputTextLines(lines);    
+
+            return new List<string>();
+        }
+        
+        private Dictionary<int, string> GetLinesFromInput(string path)
+        {            
+            Dictionary<int, string> lines = new Dictionary<int, string>();  
 
             using (StreamReader file = new StreamReader(path))
             {
@@ -22,13 +29,24 @@ namespace TradeCategoryQuestion.Services
 
                 while ((textLine = file.ReadLine()) != null)
                 {
-                    trade = trade.SetPropertyByLineNumber(lineNumber, textLine);
+                    lines.Add(lineNumber, textLine);
                     lineNumber++;
                 }
                 file.Close();                
             }
 
-            return trades;
-        }        
+            return lines;
+        }
+        
+        private Trade GetTradeFromInputTextLines(Dictionary<int, string> inputTextLines)
+        {
+            Trade trade = new Trade();
+            foreach (var line in inputTextLines)
+            {
+                trade = trade.SetPropertyByLineNumber(line.Key, line.Value);
+            }
+
+            return trade;
+        }
     }
 }
