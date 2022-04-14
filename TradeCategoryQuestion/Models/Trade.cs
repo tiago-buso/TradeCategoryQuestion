@@ -98,7 +98,7 @@ namespace TradeCategoryQuestion.Models
 
         public void SetClientSectorFromText(string text)
         {
-            ClientSector = text;   
+            ClientSector = text.ToUpper();   
         }
 
         public void SetNextPaymentDateFromText(string text)

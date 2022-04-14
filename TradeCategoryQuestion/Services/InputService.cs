@@ -9,13 +9,25 @@ namespace TradeCategoryQuestion.Services
 {
     public class InputService 
     {
-        public List<string> GetCategoriesFromFile(string path)
+        public List<string> GetCategoriesDescriptionFromFile(string path)
         {
+            List<string> categoriesDescription = new List<string>();
+
             Dictionary<int, string> lines = GetLinesFromInput(path);
 
-            List<Trade> trades = GetTradeFromInputTextLines(lines);    
+            List<Trade> trades = GetTradeFromInputTextLines(lines);
 
-            return new List<string>();
+            List<IRisk> risks = GetRisks();
+
+            foreach (var trade in trades)
+            {
+                Category category = new Category(risks);
+                category.SetCategoryDescription(trade);
+
+                categoriesDescription.Add(category.Description);
+            }
+
+            return categoriesDescription;
         }
         
         private Dictionary<int, string> GetLinesFromInput(string path)
@@ -56,6 +68,19 @@ namespace TradeCategoryQuestion.Services
             }
 
             return trades;
+        }
+
+        private List<IRisk> GetRisks()
+        {
+            List<IRisk> risks = new List<IRisk>();
+
+            foreach (RiskEnum riskEnum in Enum.GetValues(typeof(RiskEnum)))
+            {
+                IRisk risk = RiskFactory.Create(riskEnum);
+                risks.Add(risk);
+            }
+
+            return risks;
         }
     }
 }

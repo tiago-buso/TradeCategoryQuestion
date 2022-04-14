@@ -10,7 +10,7 @@ namespace TradeCategoryQuestion.Models
     {
         double Value { get;  } 
         string ClientSector { get;  } 
-        DateTime NextPaymentDate { get;  }
+        DateTime NextPaymentDate { get;  }        
 
         bool IsValueColumnLine(int index);
         bool IsClientSectorColumnLine(int index);
