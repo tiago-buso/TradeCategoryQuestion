@@ -10,12 +10,12 @@ namespace TradeCategoryQuestion.Models
     {
 
         //read-only properties from line number of input file and column index from the third line onwards (ITrade properties)
-        private readonly int ReferenceDateLineNumber = 1;
-        private readonly int NumberOfTradesLineNumber = 2;
+        public static readonly int ReferenceDateLineNumber = 1;
+        public static readonly int NumberOfTradesLineNumber = 2;
         private readonly int ValueColumn = 0;
         private readonly int ClientSectorColumn = 1;
         private readonly int NextPaymentDateColumn = 2;
-        private readonly string DateTimeFormat = "MM/dd/yyyy";
+        private static readonly string DateTimeFormat = "MM/dd/yyyy";
 
         //Itrade properties
         public double Value {get; private set;}
@@ -26,39 +26,25 @@ namespace TradeCategoryQuestion.Models
 
         //Trade properties
         public DateTime ReferenceDate { get; private set; }
-        public int NumberOfTrades { get; private set; }
+        public int NumberOfTrades { get; private set; }      
+       
 
-        public bool IsReferenceDateLineNumber(int textFileLineNumber)
+        public Trade(DateTime referenceDate, int numberOfTrades)
         {
-            return ReferenceDateLineNumber == textFileLineNumber;
-        }
-
-        public bool IsNumberOfTradesLineNumber(int textFileLineNumber)
-        {
-            return NumberOfTradesLineNumber == textFileLineNumber;
+            this.ReferenceDate = referenceDate;
+            this.NumberOfTrades = numberOfTrades; 
         }
        
-        public Trade SetPropertyByLineNumber(int textFileLineNumber, string textLine)
-        {
-            if (IsReferenceDateLineNumber(textFileLineNumber))
-            {
-                ReferenceDate = DateTime.ParseExact(textLine, DateTimeFormat, null);   
-            }
-            else if (IsNumberOfTradesLineNumber(textFileLineNumber))
-            {
-                NumberOfTrades = int.Parse(textLine);
-            }
-            else
-            {
-                string[] transactionDetails = textLine.Split(' ');
+        public Trade SetPropertyByText(string textLine)
+        {            
+            string[] transactionDetails = textLine.Split(' ');
 
-                int index = 0;
-                foreach (var detail in transactionDetails)
-                {
-                    SetITradePropertiesByColumnIndex(index, detail);
-                    index++;
-                }
-            }
+            int index = 0;
+            foreach (var detail in transactionDetails)
+            {
+                SetITradePropertiesByColumnIndex(index, detail);
+                index++;
+            }           
 
             return this;
         }
@@ -77,6 +63,16 @@ namespace TradeCategoryQuestion.Models
             {
                 SetNextPaymentDateFromText(detail); 
             }
+        }
+
+        public static DateTime GetReferenceDateFromText(string text)
+        {
+            return DateTime.ParseExact(text, DateTimeFormat, null);
+        }
+
+        public static int GetNumberOfTradesFromText(string text)
+        {
+            return int.Parse(text);
         }
 
         public bool IsValueColumnLine(int index)

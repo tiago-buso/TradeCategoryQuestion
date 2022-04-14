@@ -13,7 +13,7 @@ namespace TradeCategoryQuestion.Services
         {
             Dictionary<int, string> lines = GetLinesFromInput(path);
 
-            Trade trade = GetTradeFromInputTextLines(lines);    
+            List<Trade> trades = GetTradeFromInputTextLines(lines);    
 
             return new List<string>();
         }
@@ -38,15 +38,24 @@ namespace TradeCategoryQuestion.Services
             return lines;
         }
         
-        private Trade GetTradeFromInputTextLines(Dictionary<int, string> inputTextLines)
+        private List<Trade> GetTradeFromInputTextLines(Dictionary<int, string> inputTextLines)
         {
-            Trade trade = new Trade();
-            foreach (var line in inputTextLines)
+            List<Trade> trades = new List<Trade>();            
+
+            DateTime referenceDate = Trade.GetReferenceDateFromText(inputTextLines.First(x => x.Key == Trade.ReferenceDateLineNumber).Value);
+            int numberOfTrades = Trade.GetNumberOfTradesFromText(inputTextLines.First(x => x.Key == Trade.NumberOfTradesLineNumber).Value);
+
+            IEnumerable<string> remainingLines = inputTextLines.Where(x => x.Key != Trade.NumberOfTradesLineNumber && x.Key != Trade.ReferenceDateLineNumber).ToList().Select(x => x.Value);
+
+            foreach (var line in remainingLines)
             {
-                trade = trade.SetPropertyByLineNumber(line.Key, line.Value);
+                Trade trade = new Trade(referenceDate, numberOfTrades);
+                trade = trade.SetPropertyByText(line);
+                
+                trades.Add(trade);
             }
 
-            return trade;
+            return trades;
         }
     }
 }
