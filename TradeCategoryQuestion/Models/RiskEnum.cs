@@ -14,6 +14,8 @@ namespace TradeCategoryQuestion.Models
         [Description("MEDIUMRISK")]
         Medium = 1,
         [Description("HIGHRISK")]
-        High = 2
+        High = 2,
+        [Description("NOTCLASSIFIED")]
+        Not = 3,
     }
 }

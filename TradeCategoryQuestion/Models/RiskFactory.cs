@@ -19,7 +19,7 @@ namespace TradeCategoryQuestion.Models
                 case RiskEnum.High:
                     return new HighRisk();
                 default:
-                    throw new NotImplementedException();
+                    return new NotClassified();
             }
         }
     }
